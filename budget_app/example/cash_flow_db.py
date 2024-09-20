@@ -36,19 +36,13 @@ def get_all_transaction_records():
     return all_transactions
 
 
-def insert_new_transaction_record():
+def insert_new_transaction_record(data_transaction):
     cnx = mysql.connector.connect(**DB_CONFIG)
     cursor = cnx.cursor()
 
     add_transaction = ("INSERT INTO transaction "
                        "(income, expenditure, description, date_time, company_id) "
-                       "VALUES (%s, %s, %s, %s, %s)")
-
-    add_transaction_tipped = """INSERT INTO transaction 
-                       (income, expenditure, description, date_time, company_id) 
-                       VALUES (%s, %s, %s, %s, %s)"""
-
-    data_transaction = (135000, 0, "Дохід від реалізації послуг", "2022-10-01 16:00", 4)
+                       "VALUES (%(income)s, %(expenditure)s, %(description)s, %(date_time)s, %(company_id)s)")
 
     cursor.execute(add_transaction, data_transaction)
 

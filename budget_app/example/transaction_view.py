@@ -1,6 +1,9 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.urls import reverse
 
 from . import cash_flow_db
+from .cash_flow_db import insert_new_transaction_record
+from .transactions_form import TransactionForm
 
 
 def render_transaction(request):
@@ -23,9 +26,24 @@ def render_transaction(request):
 
 
 def render_real_transactions(request):
-    transactions_list = {'all': cash_flow_db.get_all_transaction_records()}
+    transactions_list = {'all_transactions': cash_flow_db.get_all_transaction_records()}
     return render(
         request,
         'example/template_real_transactions.html',
         context=transactions_list,
     )
+
+
+def render_transaction_form(request):
+    if request.method == 'POST':
+        form = TransactionForm(request.POST)
+        if form.is_valid():
+            insert_new_transaction_record(form.cleaned_data)
+            return redirect(reverse('example:real_transactions'))
+    else:
+        form_dict = {'form': TransactionForm()}
+        return render(
+            request,
+            'example/transactions_form.html',
+            context=form_dict,
+        )

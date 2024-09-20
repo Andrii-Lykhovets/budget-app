@@ -2,6 +2,7 @@ from django.urls import path
 from . import views, transaction_view
 
 # this file is responsible for managing (giving path to) views
+app_name = 'example'
 
 urlpatterns = [
     path('', views.index, name='index'),
@@ -11,4 +12,5 @@ urlpatterns = [
     path('template_vars/', views.render_templated_with_variables, name='template_vars'),
     path('transaction_data/', transaction_view.render_transaction, name='transaction_data'),
     path('transactions/', transaction_view.render_real_transactions, name='real_transactions'),
+    path('new_transaction/', transaction_view.render_transaction_form, name='insert_transaction'),
 ]
